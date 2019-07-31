@@ -17,6 +17,7 @@ namespace fh {
     
     void releaseImage(cv::Mat** image);
     void drawHoughLine(cv::Mat& image, cv::Vec3f& line);
+    void drawHoughLine(cv::Mat& image, cv::Vec3d& line);
 }
 
 

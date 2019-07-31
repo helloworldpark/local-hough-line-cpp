@@ -46,6 +46,8 @@ namespace fh {
         LineParams params;
         
         void preprocess(cv::Mat* rawImage);
+        bool isFindingMeaningful(double rho, cv::Vec3d& theta);
+        bool didFindLine(cv::Mat* image, double rho, cv::Vec3d& theta, cv::Vec3d& line);
         static cv::Vec3d convertFriendly(cv::Vec3d& line);
         
     public:

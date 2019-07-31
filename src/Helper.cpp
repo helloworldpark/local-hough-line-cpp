@@ -52,4 +52,16 @@ namespace fh {
         pt2.y = cvRound(y0 - 1000*(a));
         cv::line(image, pt1, pt2, cv::Scalar(0xff, 0, 0), 1, cv::LINE_AA);
     }
+    
+    void drawHoughLine(cv::Mat& image, cv::Vec3d& line) {
+        double rho = line[0], theta = line[1];
+        cv::Point pt1, pt2;
+        double a = cos(theta), b = sin(theta);
+        double x0 = a*rho, y0 = b*rho;
+        pt1.x = cvRound(x0 + 1000*(-b));
+        pt1.y = cvRound(y0 + 1000*(a));
+        pt2.x = cvRound(x0 - 1000*(-b));
+        pt2.y = cvRound(y0 - 1000*(a));
+        cv::line(image, pt1, pt2, cv::Scalar(0xff, 0, 0), 1, cv::LINE_AA);
+    }
 }

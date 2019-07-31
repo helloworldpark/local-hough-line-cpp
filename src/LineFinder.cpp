@@ -49,7 +49,58 @@ cv::Mat& LineFinder::runStandardHough() {
 cv::Mat& LineFinder::runFasterHough() {
     releaseImage(&_result);
     
+    // Prepare cos, sin
+    std::vector<cv::Vec3d> trigs(params.houghResolutionTheta);
+    for (int t = 0; t < params.houghResolutionTheta; t++) {
+        double theta = ((double)t) / ((double)params.houghResolutionTheta);
+        theta *= CV_PI;
+        trigs.push_back(cv::Vec3d(theta, cos(theta), sin(theta)));
+    }
+    
+    // Prepare rhos
+    int H = (int)hypot(_worksheet->size[0], _worksheet->size[1]);
+    std::vector<double> rhos;
+    int rhoCount = floor(((double)H) / ((double)params.houghResolutionRho));
+    for (int r = -rhoCount; r <= rhoCount; r++) {
+        rhos.push_back(r * ((double)params.houghResolutionRho));
+    }
+    
+    std::vector<cv::Vec3d> lines;
+    // Iterate for theta
+    for (auto theta: trigs) {
+        // Iterate for rho
+        for (auto rho: rhos) {
+            // Check if this rho and theta is meaningful
+            if (!isFindingMeaningful(rho, theta)) {
+                continue;
+            }
+            
+            cv::Vec3d line;
+            // If success to find a line, append it
+            bool didFind = didFindLine(_worksheet, rho, theta, line);
+            if (didFind) {
+                lines.push_back(line);
+            }
+        }
+    }
+    
+    // Plot
+    _result = new cv::Mat(_worksheet->size(), CV_8UC3);
+    cv::cvtColor(*_worksheet, *_result, cv::COLOR_GRAY2BGR);
+    
+    for (auto line: lines) {
+        drawHoughLine(*_result, line);
+    }
+    
     return *_result;
+}
+
+bool LineFinder::isFindingMeaningful(double rho, cv::Vec3d& theta) {
+    return false;
+}
+
+bool LineFinder::didFindLine(cv::Mat* image, double rho, cv::Vec3d& theta, cv::Vec3d& line) {
+    return false;
 }
 
 void LineFinder::preprocess(cv::Mat* rawImage) {
