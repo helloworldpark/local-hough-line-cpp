@@ -10,6 +10,7 @@
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
+#include "LineFinder.hpp"
 
 int main(int argc, const char * argv[]) {
     
@@ -23,9 +24,9 @@ int main(int argc, const char * argv[]) {
         return -1;
     }
     
-    cv::namedWindow("Named");
-    cv::imshow("Named", image);
-    cv::waitKey(0);
+    fh::LineFinder* lineFinder = new fh::LineFinder(&image);
+    
+    delete lineFinder;
     
     return 0;
 }

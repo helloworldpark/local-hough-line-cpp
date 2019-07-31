@@ -9,7 +9,7 @@
 #include "Helper.hpp"
 
 namespace fh {
-    cv::Vec2i getProcessingSize(cv::Mat& image, int minLength) {
+    cv::Size getProcessingSize(cv::Mat& image, int minLength) {
         double h = (double)image.rows;
         double w = (double)image.cols;
         
@@ -29,7 +29,7 @@ namespace fh {
                 w = minLength;
             }
         }
-        return cv::Vec2i((int)h, (int)w);
+        return cv::Size((int)w, (int)h);
     }
     
 }

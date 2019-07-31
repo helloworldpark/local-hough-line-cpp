@@ -13,7 +13,7 @@
 #include <opencv2/core.hpp>
 
 namespace fh {
-    cv::Vec2i getProcessingSize(cv::Mat& image, int minLength);
+    cv::Size getProcessingSize(cv::Mat& image, int minLength);
 }
 
 
