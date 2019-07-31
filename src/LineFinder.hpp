@@ -28,11 +28,14 @@ namespace fh {
         
         int houghResolutionTheta = 360;
         int houghResolutionRho = 1;
-        int houghThreshold = -1;
         
         int minCountKDE = 10;
         int thetaTolerance = 12;
         bool verbose = false;
+        
+        inline int houghThreshold() {
+            return int(worksheetLength / 3);
+        }
     };
     
     
@@ -43,13 +46,14 @@ namespace fh {
         LineParams params;
         
         void preprocess(cv::Mat* rawImage);
+        static cv::Vec3d convertFriendly(cv::Vec3d& line);
         
     public:
         LineFinder(cv::Mat* rawImage, LineParams params = LineParams());
         ~LineFinder();
         
-        cv::Mat* runStandardHough();
-        cv::Mat* runFasterHough();
+        cv::Mat& runStandardHough();
+        cv::Mat& runFasterHough();
     };
 }
 

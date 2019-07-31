@@ -14,6 +14,9 @@
 
 namespace fh {
     cv::Size getProcessingSize(cv::Mat& image, int minLength);
+    
+    void releaseImage(cv::Mat** image);
+    void drawHoughLine(cv::Mat& image, cv::Vec3f& line);
 }
 
 

@@ -26,6 +26,11 @@ int main(int argc, const char * argv[]) {
     
     fh::LineFinder* lineFinder = new fh::LineFinder(&image);
     
+    cv::Mat& standardHough = lineFinder->runStandardHough();
+    cv::namedWindow("Standard Hough");
+    cv::imshow("Standard Hough", standardHough);
+    cv::waitKey(0);
+
     delete lineFinder;
     
     return 0;

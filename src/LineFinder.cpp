@@ -9,7 +9,7 @@
 #include "LineFinder.hpp"
 #include "Helper.hpp"
 #include <opencv2/imgproc.hpp>
-#include <opencv2/highgui.hpp>
+#include <vector>
 
 
 using namespace fh;
@@ -21,21 +21,35 @@ LineFinder::LineFinder(cv::Mat* rawImage, LineParams params) {
 }
 
 LineFinder::~LineFinder() {
-    if (_worksheet != nullptr) {
-        _worksheet->release();
+    releaseImage(&_worksheet);
+    releaseImage(&_result);
+}
+
+// https://docs.opencv.org/4.1.0/d5/df9/samples_2cpp_2tutorial_code_2ImgTrans_2houghlines_8cpp-example.html#a8
+cv::Mat& LineFinder::runStandardHough() {
+    releaseImage(&_result);
+    
+    std::vector<cv::Vec3f> lines;
+    cv::HoughLines(*_worksheet,
+                   lines,
+                   params.houghResolutionRho,
+                   CV_PI / params.houghResolutionTheta,
+                   params.houghThreshold());
+    
+    _result = new cv::Mat(_worksheet->size(), CV_8UC3);
+    cv::cvtColor(*_worksheet, *_result, cv::COLOR_GRAY2BGR);
+
+    for (auto line: lines) {
+        drawHoughLine(*_result, line);
     }
     
-    if (_result != nullptr) {
-        _result->release();
-    }
+    return *_result;
 }
 
-cv::Mat* LineFinder::runStandardHough() {
-    return nullptr;
-}
-
-cv::Mat* LineFinder::runFasterHough() {
-    return nullptr;
+cv::Mat& LineFinder::runFasterHough() {
+    releaseImage(&_result);
+    
+    return *_result;
 }
 
 void LineFinder::preprocess(cv::Mat* rawImage) {
@@ -64,8 +78,8 @@ void LineFinder::preprocess(cv::Mat* rawImage) {
     cv::Canny(*grayImage, *edgeImage, params.cannyThreshold1, params.cannyThreshold2, params.cannyAperture, params.cannyUseL2Gradient);
     
     _worksheet = edgeImage;
-    
-    cv::namedWindow("Preprocess");
-    cv::imshow("Preprocess", *_worksheet);
-    cv::waitKey(0);
+}
+
+cv::Vec3d LineFinder::convertFriendly(cv::Vec3d& line) {
+    return cv::Vec3d(line[0], 90.0 - line[0] * (CV_PI / 180.0), line[2]);
 }
