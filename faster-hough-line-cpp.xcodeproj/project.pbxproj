@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CE84D3C222F1BCBF0012BA85 /* FasterHough.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE84D3C022F1BCBF0012BA85 /* FasterHough.cpp */; };
+		CE84D3C222F1BCBF0012BA85 /* LineFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE84D3C022F1BCBF0012BA85 /* LineFinder.cpp */; };
 		CEDABA0B22F1A75500DF9D4B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEDABA0A22F1A75500DF9D4B /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -24,8 +24,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		CE84D3C022F1BCBF0012BA85 /* FasterHough.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FasterHough.cpp; sourceTree = "<group>"; };
-		CE84D3C122F1BCBF0012BA85 /* FasterHough.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FasterHough.hpp; sourceTree = "<group>"; };
+		CE84D3C022F1BCBF0012BA85 /* LineFinder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LineFinder.cpp; sourceTree = "<group>"; };
+		CE84D3C122F1BCBF0012BA85 /* LineFinder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LineFinder.hpp; sourceTree = "<group>"; };
 		CE84D3C422F1BDE10012BA85 /* test26.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test26.jpg; sourceTree = "<group>"; };
 		CE84D3C522F1BDE10012BA85 /* test12.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test12.jpg; sourceTree = "<group>"; };
 		CE84D3C622F1BDE10012BA85 /* test43.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test43.jpg; sourceTree = "<group>"; };
@@ -171,8 +171,8 @@
 			isa = PBXGroup;
 			children = (
 				CEDABA0A22F1A75500DF9D4B /* main.cpp */,
-				CE84D3C022F1BCBF0012BA85 /* FasterHough.cpp */,
-				CE84D3C122F1BCBF0012BA85 /* FasterHough.hpp */,
+				CE84D3C122F1BCBF0012BA85 /* LineFinder.hpp */,
+				CE84D3C022F1BCBF0012BA85 /* LineFinder.cpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -233,7 +233,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE84D3C222F1BCBF0012BA85 /* FasterHough.cpp in Sources */,
+				CE84D3C222F1BCBF0012BA85 /* LineFinder.cpp in Sources */,
 				CEDABA0B22F1A75500DF9D4B /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
