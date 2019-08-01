@@ -10,6 +10,8 @@
 #include "Helper.hpp"
 #include <opencv2/imgproc.hpp>
 #include <vector>
+#include <chrono>
+#include <iostream>
 
 
 using namespace fh;
@@ -35,12 +37,19 @@ LineFinder::~LineFinder() {
 cv::Mat& LineFinder::runStandardHough() {
     releaseImage(&_result);
     
+    auto start = std::chrono::system_clock::now();
+    
     std::vector<cv::Vec3f> lines;
     cv::HoughLines(*_worksheet,
                    lines,
                    params.houghResolutionRho,
                    CV_PI / params.houghResolutionTheta,
                    params.houghThreshold());
+    
+    auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double> diff = end - start;
+    std::cout << "Standard Hough: " << diff.count() << std::endl;
+    
     
     _result = new cv::Mat(_worksheet->size(), CV_8UC3);
     cv::cvtColor(*_worksheet, *_result, cv::COLOR_GRAY2BGR);
@@ -54,6 +63,8 @@ cv::Mat& LineFinder::runStandardHough() {
 
 cv::Mat& LineFinder::runFasterHough() {
     releaseImage(&_result);
+    
+    auto start = std::chrono::system_clock::now();
     
     // Prepare cos, sin
     std::vector<Angle> trigs(params.houghResolutionTheta);
@@ -91,6 +102,10 @@ cv::Mat& LineFinder::runFasterHough() {
             }
         }
     }
+    
+    auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double> diff = end - start;
+    std::cout << "Faster Hough: " << diff.count() << std::endl;
     
     // Plot
     _result = new cv::Mat(_worksheet->size(), CV_8UC3);

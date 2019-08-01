@@ -9,7 +9,6 @@
 #ifndef FasterHough_hpp
 #define FasterHough_hpp
 
-#include <stdio.h>
 #include <string>
 #include <opencv2/core.hpp>
 
