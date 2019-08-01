@@ -48,7 +48,7 @@ namespace fh {
         double _diagonalAngle = 0.0;
         
         void preprocess(cv::Mat* rawImage);
-        bool isFindingMeaningful(double rho, cv::Vec3d& theta);
+        bool isFindingMeaningful(cv::Size& imageSize, double rho, cv::Vec3d& theta, double diagonalAngle);
         bool didFindLine(cv::Mat* image, double rho, cv::Vec3d& theta, cv::Vec3d& line);
         bool isLine(cv::Mat* image, cv::Point& p);
         static cv::Vec3d convertFriendly(cv::Vec3d& line);

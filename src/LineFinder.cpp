@@ -65,11 +65,14 @@ cv::Mat& LineFinder::runFasterHough() {
     
     // Prepare rhos
     int H = (int)diagonalLength();
-    std::vector<double> rhos;
     int rhoCount = floor(((double)H) / ((double)params.houghResolutionRho));
+    std::vector<double> rhos;
     for (int r = -rhoCount; r <= rhoCount; r++) {
         rhos.push_back(r * ((double)params.houghResolutionRho));
     }
+    
+    double diagonalAngle = atan2(_worksheet->rows, _worksheet->cols);
+    cv::Size imgSize = _worksheet->size();
     
     std::vector<Line> lines;
     // Iterate for theta
@@ -77,7 +80,7 @@ cv::Mat& LineFinder::runFasterHough() {
         // Iterate for rho
         for (auto rho: rhos) {
             // Check if this rho and theta is meaningful
-            if (!isFindingMeaningful(rho, theta)) {
+            if (!isFindingMeaningful(imgSize, rho, theta, diagonalAngle)) {
                 continue;
             }
             
@@ -100,8 +103,28 @@ cv::Mat& LineFinder::runFasterHough() {
     return *_result;
 }
 
-bool LineFinder::isFindingMeaningful(double rho, Angle& theta) {
-    return true;
+bool LineFinder::isFindingMeaningful(cv::Size& imageSize, double rho, cv::Vec3d& theta, double diagonalAngle) {
+    double t = theta[0];
+    double tcos = theta[1];
+    double tsin = theta[2];
+    
+    // Assuming that 0 <= t < PI
+    if (rho > 0) {
+        if (t < diagonalAngle) {
+            return rho <= imageSize.width / tcos;
+        } else if (t < CV_PI * 0.5) {
+            return rho <= imageSize.height / tsin;
+        }
+        return rho <= imageSize.height * tsin;
+    }
+    
+    if (t < CV_PI * 0.5) {
+        return false;
+    } else if (t < (CV_PI * 0.5 + diagonalAngle)) {
+        return rho >= -imageSize.height * tsin;
+    }
+    
+    return rho >= -imageSize.width * tcos;
 }
 
 bool LineFinder::didFindLine(cv::Mat* image, double rho, Angle& theta, Line& line) {
