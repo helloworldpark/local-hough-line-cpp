@@ -147,7 +147,7 @@ bool LineFinder::isFindingMeaningful(cv::Size& imageSize, float rho, cv::Vec3f& 
     float tsin = theta[2];
     
     // Assuming that 0 <= t < PI
-    if (rho > 0) {
+    if (rho >= 0) {
         if (t < diagonalAngle) {
             return rho <= imageSize.width / tcos;
         } else if (t < pi2) {
@@ -161,8 +161,7 @@ bool LineFinder::isFindingMeaningful(cv::Size& imageSize, float rho, cv::Vec3f& 
     } else if (t < (pi2 + diagonalAngle)) {
         return rho >= -imageSize.height * tsin;
     }
-    
-    return rho >= -imageSize.width * tcos;
+    return rho >= imageSize.width * tcos;
 }
 
 bool LineFinder::didFindLine(cv::Mat* image, float rho, Angle& theta, Line& line, int& threshold) {
