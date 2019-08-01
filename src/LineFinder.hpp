@@ -17,7 +17,7 @@ namespace fh {
     public:
         int worksheetLength = 300;
         
-        int bilateralColorS = 300;
+        int bilateralColorS = 160;
         int bilateralSpaceS = 5;
         
         int cannyAperture = 7;
@@ -33,7 +33,7 @@ namespace fh {
         bool verbose = false;
         
         inline int houghThreshold() {
-            return int(worksheetLength / 3);
+            return int(worksheetLength / 4);
         }
     };
     
@@ -47,26 +47,13 @@ namespace fh {
         double _diagonalAngle = 0.0;
         
         void preprocess(cv::Mat* rawImage);
-        bool isFindingMeaningful(cv::Size& imageSize, double rho, cv::Vec3d& theta, double diagonalAngle);
-        bool didFindLine(cv::Mat* image, double rho, cv::Vec3d& theta, cv::Vec3d& line);
-        bool isLine(cv::Mat* image, cv::Point& p);
-        static cv::Vec3d convertFriendly(cv::Vec3d& line);
+        static bool isFindingMeaningful(cv::Size& imageSize, float rho, cv::Vec3f& theta, float diagonalAngle);
+        static bool didFindLine(cv::Mat* image, float rho, cv::Vec3f& theta, cv::Vec3f& line, int& threshold);
+        static bool isLine(cv::Mat* image, cv::Point& p);
+        static cv::Vec3f convertFriendly(cv::Vec3f& line);
         
         inline double diagonalAngle() { return _diagonalAngle; }
         inline double diagonalLength() { return _diagonalLength; }
-        
-        enum Direction: int {
-            N = 0,
-            S,
-            W,
-            E,
-            CENTER,
-            NW,
-            NE,
-            SW,
-            SE,
-            COUNT
-        };
         
     public:
         LineFinder(cv::Mat* rawImage, LineParams params = LineParams());

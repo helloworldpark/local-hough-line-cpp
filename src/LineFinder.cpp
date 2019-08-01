@@ -16,8 +16,10 @@
 
 using namespace fh;
 
-typedef cv::Vec3d Line; // rho, theta, votes
-typedef cv::Vec3d Angle; // theta, cos, sin
+typedef cv::Vec3f Line; // rho, theta, votes
+typedef cv::Vec3f Angle; // theta, cos, sin
+
+const float pi2 = CV_PI * 0.5f;
 
 LineFinder::LineFinder(cv::Mat* rawImage, LineParams params) {
     this->params = params;
@@ -69,35 +71,51 @@ cv::Mat& LineFinder::runFasterHough() {
     // Prepare cos, sin
     std::vector<Angle> trigs(params.houghResolutionTheta);
     for (int t = 0; t < params.houghResolutionTheta; t++) {
-        double theta = ((double)t) / ((double)params.houghResolutionTheta);
+        float theta = ((float)t) / ((float)params.houghResolutionTheta);
         theta *= CV_PI;
         trigs[t] = Angle(theta, cos(theta), sin(theta));
     }
     
     // Prepare rhos
     int H = (int)diagonalLength();
-    int rhoCount = floor(((double)H) / ((double)params.houghResolutionRho));
-    std::vector<double> rhos;
+    int rhoCount = floor(H / ((float)params.houghResolutionRho));
+    std::vector<float> rhos;
     for (int r = -rhoCount; r <= rhoCount; r++) {
-        rhos.push_back(r * ((double)params.houghResolutionRho));
+        rhos.push_back(r * ((float)params.houghResolutionRho));
     }
     
-    double diagonalAngle = atan2(_worksheet->rows, _worksheet->cols);
+    float diagonalAngle = atan2(_worksheet->rows, _worksheet->cols);
     cv::Size imgSize = _worksheet->size();
     
     std::vector<Line> lines;
     // Iterate for theta
+    double ttFind = 0.0;
+    double ttMean = 0.0;
+    int didSearch = 0;
+    
+    int threshold = params.houghThreshold();
     for (auto theta: trigs) {
         // Iterate for rho
         for (auto rho: rhos) {
             // Check if this rho and theta is meaningful
-            if (!isFindingMeaningful(imgSize, rho, theta, diagonalAngle)) {
+            auto isMeaningfulStart = std::chrono::system_clock::now();
+            bool isMeaningful = isFindingMeaningful(imgSize, rho, theta, diagonalAngle);
+            auto isMeaningfulEnd = std::chrono::system_clock::now();
+            std::chrono::duration<double> diff0 = isMeaningfulEnd - isMeaningfulStart;
+            ttMean += diff0.count();
+            if (!isMeaningful) {
                 continue;
             }
+            ++didSearch;
             
             Line line;
             // If success to find a line, append it
-            if (didFindLine(_worksheet, rho, theta, line)) {
+            auto didFindStart = std::chrono::system_clock::now();
+            bool didFind = didFindLine(_worksheet, rho, theta, line, threshold);
+            auto didFindEnd = std::chrono::system_clock::now();
+            std::chrono::duration<double> diff = didFindEnd - didFindStart;
+            ttFind += diff.count();
+            if (didFind) {
                 lines.push_back(line);
             }
         }
@@ -106,6 +124,9 @@ cv::Mat& LineFinder::runFasterHough() {
     auto end = std::chrono::system_clock::now();
     std::chrono::duration<double> diff = end - start;
     std::cout << "Faster Hough: " << diff.count() << std::endl;
+    std::cout << " -didFindLine: " << ttFind << std::endl;
+    std::cout << " -isMeaningful: " << ttMean << std::endl;
+    std::cout << " -Did Search / Total: " << didSearch << "/" << rhos.size() * trigs.size() << std::endl;
     
     // Plot
     _result = new cv::Mat(_worksheet->size(), CV_8UC3);
@@ -118,31 +139,33 @@ cv::Mat& LineFinder::runFasterHough() {
     return *_result;
 }
 
-bool LineFinder::isFindingMeaningful(cv::Size& imageSize, double rho, cv::Vec3d& theta, double diagonalAngle) {
-    double t = theta[0];
-    double tcos = theta[1];
-    double tsin = theta[2];
+
+
+bool LineFinder::isFindingMeaningful(cv::Size& imageSize, float rho, cv::Vec3f& theta, float diagonalAngle) {
+    float t = theta[0];
+    float tcos = theta[1];
+    float tsin = theta[2];
     
     // Assuming that 0 <= t < PI
     if (rho > 0) {
         if (t < diagonalAngle) {
             return rho <= imageSize.width / tcos;
-        } else if (t < CV_PI * 0.5) {
+        } else if (t < pi2) {
             return rho <= imageSize.height / tsin;
         }
         return rho <= imageSize.height * tsin;
     }
     
-    if (t < CV_PI * 0.5) {
+    if (t < pi2) {
         return false;
-    } else if (t < (CV_PI * 0.5 + diagonalAngle)) {
+    } else if (t < (pi2 + diagonalAngle)) {
         return rho >= -imageSize.height * tsin;
     }
     
     return rho >= -imageSize.width * tcos;
 }
 
-bool LineFinder::didFindLine(cv::Mat* image, double rho, Angle& theta, Line& line) {
+bool LineFinder::didFindLine(cv::Mat* image, float rho, Angle& theta, Line& line, int& threshold) {
     double tcos = theta[1];
     double tsin = theta[2];
     
@@ -151,16 +174,16 @@ bool LineFinder::didFindLine(cv::Mat* image, double rho, Angle& theta, Line& lin
     
     if (tcos == 0.0) {
         // It is horizontal
-        pt0 = cv::Point(0, (int)round(rho / tsin));
-        pt1 = cv::Point(image->cols, (int)round(rho / tsin));
+        pt0 = cv::Point(0, (int)(rho / tsin));
+        pt1 = cv::Point(image->cols, (int)(rho / tsin));
     } else if (tsin == 0.0) {
         // It is vertical
-        pt0 = cv::Point((int)round(rho / tcos), 0);
-        pt1 = cv::Point((int)round(rho / tcos), image->rows);
+        pt0 = cv::Point((int)(rho / tcos), 0);
+        pt1 = cv::Point((int)(rho / tcos), image->rows);
     } else {
         // Find x = -tan(theta) * y + rho / cos(theta)
-        pt0 = cv::Point(0, (int)round(rho / tsin));
-        pt1 = cv::Point((int)round(rho / tcos), 0);
+        pt0 = cv::Point(0, (int)(rho / tsin));
+        pt1 = cv::Point((int)(rho / tcos), 0);
     }
     
     line[0] = rho;
@@ -169,102 +192,65 @@ bool LineFinder::didFindLine(cv::Mat* image, double rho, Angle& theta, Line& lin
 
     cv::LineIterator iterator(*image, pt0, pt1);
     
-    int votes = 0;
+    if (iterator.count <= threshold) {
+        return false;
+    }
+    
     for (int i = 0; i < iterator.count; i++, ++iterator) {
         cv::Point pos = iterator.pos();
-        bool isPointLine = isLine(image, pos);
+        bool isPointLine = (*iterator.ptr != 0) || isLine(image, pos);
+
         if (isPointLine) {
-            // Accumulate accumulate
-            votes += 1;
+            // Accumulate votes
+            line[2] += 1;
         } else {
-            if (votes <= params.houghThreshold()) {
+            if (line[2] <= threshold) {
                 // If votes are lower than threshold
                 // Discard
-                votes = 0;
+                line[2] = 0;
             } else {
                 // Else
-                // Found a line, increase votes
-                line[2] += votes;
+                // Found a line, finish
+                break;
             }
         }
     }
-    
-    return line[2] > 0;
+    return line[2] > threshold;
 }
 
 
 
 bool LineFinder::isLine(cv::Mat* image, cv::Point& p) {
-    bool result = false;
-    uchar values[Direction::COUNT];
-    values[Direction::CENTER] = *(image->ptr(p.y, p.x));
-    
-    if (p.x == 0) {
-        // Left boundary
-        values[Direction::W] = values[Direction::CENTER];
-        values[Direction::NW] = values[Direction::CENTER];
-        values[Direction::SW] = values[Direction::CENTER];
-        values[Direction::E] = *(image->ptr(p.y, p.x + 1));
-        if (p.y == 0) {
-            // Upper boundary
-            values[Direction::NE] = values[Direction::CENTER];
-            values[Direction::N] = values[Direction::CENTER];
-            values[Direction::S] = *(image->ptr(p.y + 1, p.x));
-            values[Direction::SE] = *(image->ptr(p.y + 1, p.x + 1));
-        } else if (p.y == image->rows - 1) {
-            // Lower boundary
-            values[Direction::NE] = *(image->ptr(p.y - 1, p.x + 1));
-            values[Direction::N] = *(image->ptr(p.y - 1, p.x));
-            values[Direction::S] = values[Direction::CENTER];
-            values[Direction::SE] = values[Direction::CENTER];
-        } else {
-            values[Direction::NE] = *(image->ptr(p.y - 1, p.x + 1));
-            values[Direction::N] = *(image->ptr(p.y - 1, p.x));
-            values[Direction::S] = *(image->ptr(p.y + 1, p.x));
-            values[Direction::SE] = *(image->ptr(p.y + 1, p.x + 1));
-        }
-    } else if (p.x == image->cols - 1) {
-        // Right boundary
-        values[Direction::E] = values[Direction::CENTER];
-        values[Direction::NE] = values[Direction::CENTER];
-        values[Direction::SE] = values[Direction::CENTER];
-        values[Direction::W] = *(image->ptr(p.y, p.x - 1));
-        if (p.y == 0) {
-            // Upper boundary
-            values[Direction::NW] = values[Direction::CENTER];
-            values[Direction::N] = values[Direction::CENTER];
-            values[Direction::S] = *(image->ptr(p.y + 1, p.x));
-            values[Direction::SW] = *(image->ptr(p.y + 1, p.x - 1));
-        } else if (p.y == image->rows - 1) {
-            // Lower boundary
-            values[Direction::NW] = *(image->ptr(p.y - 1, p.x - 1));
-            values[Direction::N] = *(image->ptr(p.y - 1, p.x));
-            values[Direction::S] = values[Direction::CENTER];
-            values[Direction::SW] = values[Direction::CENTER];
-        } else {
-            values[Direction::NW] = *(image->ptr(p.y - 1, p.x - 1));
-            values[Direction::N] = *(image->ptr(p.y - 1, p.x));
-            values[Direction::S] = *(image->ptr(p.y + 1, p.x));
-            values[Direction::SW] = *(image->ptr(p.y + 1, p.x - 1));
-        }
-    } else {
-        values[Direction::N] = *(image->ptr(p.y - 1, p.x));
-        values[Direction::S] = *(image->ptr(p.y + 1, p.x));
-        values[Direction::W] = *(image->ptr(p.y, p.x - 1));
-        values[Direction::E] = *(image->ptr(p.y, p.x + 1));
-        values[Direction::NW] = *(image->ptr(p.y - 1, p.x - 1));
-        values[Direction::NE] = *(image->ptr(p.y - 1, p.x + 1));
-        values[Direction::SW] = *(image->ptr(p.y + 1, p.x - 1));
-        values[Direction::SE] = *(image->ptr(p.y + 1, p.x + 1));
+    if (p.x == 0 || p.x == image->cols) {
+        return false;
     }
     
-    for (int i = 0; i < Direction::COUNT; i++) {
-        if (values[i] == 0xff) {
+    if (p.y == 0 || p.y == image->rows) {
+        return false;
+    }
+    uchar* data = nullptr;
+    data = &image->data[(p.y - 1) * image->cols + (p.x - 1)];
+    for (int i = 0; i < 3; i++) {
+        if (data[i] != 0) {
             return true;
         }
     }
     
-    return result;
+    data = &image->data[p.y * image->cols + (p.x - 1)];
+    for (int i = 0; i < 3; i++) {
+        if (data[i] != 0) {
+            return true;
+        }
+    }
+    
+    data = &image->data[(p.y + 1) * image->cols + (p.x - 1)];
+    for (int i = 0; i < 3; i++) {
+        if (data[i] != 0) {
+            return true;
+        }
+    }
+    
+    return false;
 }
 
 void LineFinder::preprocess(cv::Mat* rawImage) {
@@ -276,7 +262,8 @@ void LineFinder::preprocess(cv::Mat* rawImage) {
     cv::resize(*rawImage, *resized, size);
     // Bilateral
     cv::Mat* bilateral = new cv::Mat(resized->size(), resized->type());
-    cv::bilateralFilter(*resized, *bilateral, 0, params.bilateralColorS, params.bilateralSpaceS);
+//    cv::bilateralFilter(*resized, *bilateral, 0, params.bilateralColorS, params.bilateralSpaceS);
+    cv::GaussianBlur(*resized, *bilateral, cv::Size(7, 7), params.bilateralColorS);
     resized->release();
     // Grayscale
     
@@ -295,6 +282,6 @@ void LineFinder::preprocess(cv::Mat* rawImage) {
     _worksheet = edgeImage;
 }
 
-cv::Vec3d LineFinder::convertFriendly(cv::Vec3d& line) {
-    return cv::Vec3d(line[0], 90.0 - line[0] * (CV_PI / 180.0), line[2]);
+cv::Vec3f LineFinder::convertFriendly(cv::Vec3f& line) {
+    return cv::Vec3f(line[0], 90.0f - line[0] * (CV_PI / 180.0f), line[2]);
 }
