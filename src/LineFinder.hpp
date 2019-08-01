@@ -44,11 +44,30 @@ namespace fh {
         cv::Mat* _result = nullptr;
         
         LineParams params;
+        double _diagonalLength = 0.0;
+        double _diagonalAngle = 0.0;
         
         void preprocess(cv::Mat* rawImage);
         bool isFindingMeaningful(double rho, cv::Vec3d& theta);
         bool didFindLine(cv::Mat* image, double rho, cv::Vec3d& theta, cv::Vec3d& line);
+        bool isLine(cv::Mat* image, cv::Point& p);
         static cv::Vec3d convertFriendly(cv::Vec3d& line);
+        
+        inline double diagonalAngle() { return _diagonalAngle; }
+        inline double diagonalLength() { return _diagonalLength; }
+        
+        enum Direction: int {
+            N = 0,
+            S,
+            W,
+            E,
+            CENTER,
+            NW,
+            NE,
+            SW,
+            SE,
+            COUNT
+        };
         
     public:
         LineFinder(cv::Mat* rawImage, LineParams params = LineParams());
