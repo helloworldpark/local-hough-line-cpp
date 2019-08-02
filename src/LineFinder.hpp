@@ -10,9 +10,13 @@
 #define FasterHough_hpp
 
 #include <string>
+#include <vector>
 #include <opencv2/core.hpp>
 
 namespace fh {
+    typedef cv::Vec3f Line; // rho, theta, votes
+    typedef cv::Vec3f Angle; // theta, cos, sin
+    
     class LineParams {
     public:
         int worksheetLength = 300;
@@ -35,6 +39,10 @@ namespace fh {
         inline int houghThreshold() {
             return int(worksheetLength / 3);
         }
+        
+        inline int houghLocalThreshold() {
+            return houghThreshold() / 2;
+        }
     };
     
     
@@ -47,6 +55,7 @@ namespace fh {
         double _diagonalAngle = 0.0;
         
         void preprocess(cv::Mat* rawImage);
+        void prepareCosSin(std::vector<Angle>& table);
         static bool isFindingMeaningful(cv::Size& imageSize, float rho, cv::Vec3f& theta, float diagonalAngle);
         static bool didFindLine(cv::Mat* image, float rho, cv::Vec3f& theta, cv::Vec3f& line, int& threshold);
         static bool isLine(cv::Mat* image, cv::Point& p);

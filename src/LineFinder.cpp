@@ -9,7 +9,6 @@
 #include "LineFinder.hpp"
 #include "Helper.hpp"
 #include <opencv2/imgproc.hpp>
-#include <vector>
 #include <chrono>
 #include <iostream>
 #include <fast_math.hpp>
@@ -17,8 +16,6 @@
 
 using namespace fh;
 
-typedef cv::Vec3f Line; // rho, theta, votes
-typedef cv::Vec3f Angle; // theta, cos, sin
 
 const float pi2 = CV_PI * 0.5f;
 
@@ -70,12 +67,8 @@ cv::Mat& LineFinder::runFasterHough() {
     auto start = std::chrono::system_clock::now();
     
     // Prepare cos, sin
-    std::vector<Angle> trigs(params.houghResolutionTheta);
-    for (int t = 0; t < params.houghResolutionTheta; t++) {
-        float theta = ((float)t) / ((float)params.houghResolutionTheta);
-        theta *= CV_PI;
-        trigs[t] = Angle(theta, cos(theta), sin(theta));
-    }
+    std::vector<Angle> trigs;
+    prepareCosSin(trigs);
     
     // Prepare rhos
     int H = (int)diagonalLength();
@@ -93,9 +86,9 @@ cv::Mat& LineFinder::runFasterHough() {
     double ttFind = 0.0;
     
     int threshold = params.houghThreshold();
-    for (auto theta: trigs) {
+    for (auto& theta: trigs) {
         // Iterate for rho
-        for (auto rho: rhos) {
+        for (auto& rho: rhos) {
             // Check if this rho and theta is meaningful
             bool isMeaningful = isFindingMeaningful(imgSize, rho, theta, diagonalAngle);
             if (!isMeaningful) {
@@ -124,7 +117,7 @@ cv::Mat& LineFinder::runFasterHough() {
     _result = new cv::Mat(_worksheet->size(), CV_8UC3);
     cv::cvtColor(*_worksheet, *_result, cv::COLOR_GRAY2BGR);
     
-    for (auto line: lines) {
+    for (auto& line: lines) {
         drawHoughLine(*_result, line);
     }
     
@@ -265,4 +258,31 @@ void LineFinder::preprocess(cv::Mat* rawImage) {
 
 cv::Vec3f LineFinder::convertFriendly(cv::Vec3f& line) {
     return cv::Vec3f(line[0], 90.0f - line[0] * (CV_PI / 180.0f), line[2]);
+}
+
+void LineFinder::prepareCosSin(std::vector<Angle>& table) {
+    // Assume houghResolutiuonTheta is a multiple of 180
+//    table.reserve(params.houghResolutionTheta);
+    
+    int idx45 = (params.houghResolutionTheta / 4);
+    int idx90 = (params.houghResolutionTheta / 2);
+    
+    for (int i = 0; i <= idx45; i++) {
+        float theta = ((float)i) / ((float)params.houghResolutionTheta) * CV_PI;
+        table.push_back(Angle(theta, cos(theta), sin(theta)));
+    }
+    
+    for (int i = idx45+1; i <= idx90; i++) {
+        auto& a = table[idx90 - i];
+        float theta = ((float)i) / ((float)params.houghResolutionTheta) * CV_PI;
+        table.push_back(Angle(theta, a[2], a[1]));
+    }
+    
+    for (int i = idx90 + 1; i < params.houghResolutionTheta; i++) {
+        auto& a = table[i - idx90];
+        float theta = ((float)i) / ((float)params.houghResolutionTheta) * CV_PI;
+        table.push_back(Angle(theta, -a[2], a[1]));
+    }
+    
+    
 }
