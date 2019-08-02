@@ -46,6 +46,31 @@ cv::Mat& LineFinder::runStandardHough() {
                    CV_PI / params.houghResolutionTheta,
                    params.houghThreshold());
     
+    // Filter candidate lines by testing locality
+    // Prepare trigonometric function table for faster calculation
+    std::vector<Angle> trigs;
+    prepareCosSin(trigs);
+    
+    // Test each line for locality
+    int localThreshold = params.houghLocalThreshold();
+    double thetaErr = CV_PI / (double)params.houghResolutionTheta;
+    std::vector<Line> realLines;
+    for (auto& line: lines) {
+        Line realLine;
+        
+        // Get precaculated cos, sin values
+        int angleIdx = cvRound(line[1] * params.houghResolutionTheta / CV_PI);
+        auto& angle = trigs[angleIdx];
+        
+        // Locality is defined as such:
+        //   If there exists a group of consecutive pixels along the line,
+        //   then that 'candidate line' is locally a line.
+        //   We decide the consecutivity by thresholding, i.e. over T pixels should be consecutive.
+        if (didFindLine(_worksheet, line[0], angle, realLine, localThreshold)) {
+            realLines.push_back(realLine);
+        }
+    }
+    
     auto end = std::chrono::system_clock::now();
     std::chrono::duration<double> diff = end - start;
     std::cout << "Standard Hough: " << diff.count() << std::endl;
@@ -54,7 +79,7 @@ cv::Mat& LineFinder::runStandardHough() {
     _result = new cv::Mat(_worksheet->size(), CV_8UC3);
     cv::cvtColor(*_worksheet, *_result, cv::COLOR_GRAY2BGR);
 
-    for (auto line: lines) {
+    for (auto& line: realLines) {
         drawHoughLine(*_result, line);
     }
     
@@ -85,7 +110,7 @@ cv::Mat& LineFinder::runFasterHough() {
     // Iterate for theta
     double ttFind = 0.0;
     
-    int threshold = params.houghThreshold();
+    int threshold = params.houghLocalThreshold();
     for (auto& theta: trigs) {
         // Iterate for rho
         for (auto& rho: rhos) {

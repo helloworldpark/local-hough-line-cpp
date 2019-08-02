@@ -41,7 +41,7 @@ namespace fh {
         }
         
         inline int houghLocalThreshold() {
-            return houghThreshold() / 2;
+            return int(worksheetLength / 4);
         }
     };
     
