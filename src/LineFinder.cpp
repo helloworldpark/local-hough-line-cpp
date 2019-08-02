@@ -12,6 +12,7 @@
 #include <vector>
 #include <chrono>
 #include <iostream>
+#include <fast_math.hpp>
 
 
 using namespace fh;
@@ -85,28 +86,21 @@ cv::Mat& LineFinder::runFasterHough() {
     }
     
     float diagonalAngle = atan2(_worksheet->rows, _worksheet->cols);
-    cv::Size imgSize = _worksheet->size();
+    cv::Size imgSize = cv::Size(_worksheet->cols, _worksheet->rows);
     
     std::vector<Line> lines;
     // Iterate for theta
     double ttFind = 0.0;
-    double ttMean = 0.0;
-    int didSearch = 0;
     
     int threshold = params.houghThreshold();
     for (auto theta: trigs) {
         // Iterate for rho
         for (auto rho: rhos) {
             // Check if this rho and theta is meaningful
-            auto isMeaningfulStart = std::chrono::system_clock::now();
             bool isMeaningful = isFindingMeaningful(imgSize, rho, theta, diagonalAngle);
-            auto isMeaningfulEnd = std::chrono::system_clock::now();
-            std::chrono::duration<double> diff0 = isMeaningfulEnd - isMeaningfulStart;
-            ttMean += diff0.count();
             if (!isMeaningful) {
                 continue;
             }
-            ++didSearch;
             
             Line line;
             // If success to find a line, append it
@@ -125,8 +119,6 @@ cv::Mat& LineFinder::runFasterHough() {
     std::chrono::duration<double> diff = end - start;
     std::cout << "Faster Hough: " << diff.count() << std::endl;
     std::cout << " -didFindLine: " << ttFind << std::endl;
-    std::cout << " -isMeaningful: " << ttMean << std::endl;
-    std::cout << " -Did Search / Total: " << didSearch << "/" << rhos.size() * trigs.size() << std::endl;
     
     // Plot
     _result = new cv::Mat(_worksheet->size(), CV_8UC3);
@@ -149,11 +141,9 @@ bool LineFinder::isFindingMeaningful(cv::Size& imageSize, float rho, cv::Vec3f& 
     // Assuming that 0 <= t < PI
     if (rho >= 0) {
         if (t < diagonalAngle) {
-            return rho <= imageSize.width / tcos;
-        } else if (t < pi2) {
-            return rho <= imageSize.height / tsin;
+            return rho < imageSize.width / tcos;
         }
-        return rho <= imageSize.height * tsin;
+        return rho < imageSize.height * tsin;
     }
     
     if (t < pi2) {
@@ -168,22 +158,14 @@ bool LineFinder::didFindLine(cv::Mat* image, float rho, Angle& theta, Line& line
     double tcos = theta[1];
     double tsin = theta[2];
     
-    cv::Point pt0;
-    cv::Point pt1;
+    float multiplier = MAX(image->rows, image->cols);
+    cv::Point2f center(rho * tcos, rho * tsin);
+    cv::Point2f direction(multiplier * tcos, multiplier * tsin);
     
-    if (tcos == 0.0) {
-        // It is horizontal
-        pt0 = cv::Point(0, (int)(rho / tsin));
-        pt1 = cv::Point(image->cols, (int)(rho / tsin));
-    } else if (tsin == 0.0) {
-        // It is vertical
-        pt0 = cv::Point((int)(rho / tcos), 0);
-        pt1 = cv::Point((int)(rho / tcos), image->rows);
-    } else {
-        // Find x = -tan(theta) * y + rho / cos(theta)
-        pt0 = cv::Point(0, (int)(rho / tsin));
-        pt1 = cv::Point((int)(rho / tcos), 0);
-    }
+    cv::Point pt0(cvRound(center.x - multiplier * tsin), cvRound(center.y + multiplier * tcos));
+    cv::Point pt1(cvRound(center.x + multiplier * tsin), cvRound(center.y - multiplier * tcos));
+    
+//    std::cout << "Rho: " << rho << ", Theta: " << (int)(theta[0] * (1800.0 / CV_PI)) << ", pt0(" << pt0.x << ", " << pt0.y << "), pt1(" << pt1.x << ", " << pt1.y << ")" << std::endl;
     
     line[0] = rho;
     line[1] = theta[0];

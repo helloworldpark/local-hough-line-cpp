@@ -17,7 +17,7 @@ namespace fh {
     public:
         int worksheetLength = 300;
         
-        int bilateralColorS = 50;
+        int bilateralColorS = 150;
         int bilateralSpaceS = 5;
         
         int cannyAperture = 7;
@@ -33,7 +33,7 @@ namespace fh {
         bool verbose = false;
         
         inline int houghThreshold() {
-            return int(worksheetLength / 4);
+            return int(worksheetLength / 3);
         }
     };
     
