@@ -8,9 +8,9 @@
 
 #include <iostream>
 #include <opencv2/core.hpp>
-#include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include "LineFinder.hpp"
+#include "Visualizer.hpp"
 
 int main(int argc, const char * argv[]) {
     
@@ -24,20 +24,18 @@ int main(int argc, const char * argv[]) {
         return -1;
     }
     
+    fh::show("Original", image);
     fh::LineFinder* lineFinder = new fh::LineFinder(&image);
     
     cv::Mat& standardHough = lineFinder->runStandardHough();
-    cv::namedWindow("Standard Hough");
-    cv::imshow("Standard Hough", standardHough);
+    fh::show("Standard Hough", lineFinder->preprocessedImage(), standardHough);
     
     cv::Mat& standardLocalHough = lineFinder->runStandardLocalHough();
-    cv::namedWindow("Standard Local Hough");
-    cv::imshow("Standard Local Hough", standardLocalHough);
+    fh::show("Standard Local Hough", lineFinder->preprocessedImage(), standardLocalHough);
     
-    cv::Mat& fastHough = lineFinder->runNaiveLocalHough();
-    cv::namedWindow("Naive Local Hough");
-    cv::imshow("Naive Local Hough", fastHough);
-    cv::waitKey(0);
+    cv::Mat& naiveLocalHough = lineFinder->runNaiveLocalHough();
+    fh::show("Naive Local Hough", lineFinder->preprocessedImage(), naiveLocalHough);
+    fh::waitKey();
 
     delete lineFinder;
     

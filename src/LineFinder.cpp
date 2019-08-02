@@ -293,6 +293,10 @@ void LineFinder::preprocess(cv::Mat* rawImage) {
     _worksheet = edgeImage;
 }
 
+cv::Mat& LineFinder::preprocessedImage() {
+    return *_worksheet;
+}
+
 cv::Vec3f LineFinder::convertFriendly(cv::Vec3f& line) {
     return cv::Vec3f(line[0], 90.0f - line[0] * (CV_PI / 180.0f), line[2]);
 }
@@ -320,6 +324,4 @@ void LineFinder::prepareCosSin(std::vector<Angle>& table) {
         float theta = ((float)i) / ((float)params.houghResolutionTheta) * CV_PI;
         table.push_back(Angle(theta, -a[2], a[1]));
     }
-    
-    
 }

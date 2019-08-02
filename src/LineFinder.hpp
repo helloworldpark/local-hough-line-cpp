@@ -71,6 +71,7 @@ namespace fh {
         cv::Mat& runStandardHough();
         cv::Mat& runStandardLocalHough();
         cv::Mat& runNaiveLocalHough();
+        cv::Mat& preprocessedImage();
     };
 }
 

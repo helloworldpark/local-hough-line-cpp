@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		CE84D3C222F1BCBF0012BA85 /* LineFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE84D3C022F1BCBF0012BA85 /* LineFinder.cpp */; };
 		CE84D3F922F1C5D00012BA85 /* Helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE84D3F722F1C5D00012BA85 /* Helper.cpp */; };
+		CE84D3FF22F47CC70012BA85 /* Visualizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE84D3FD22F47CC70012BA85 /* Visualizer.cpp */; };
 		CEDABA0B22F1A75500DF9D4B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEDABA0A22F1A75500DF9D4B /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -81,6 +82,8 @@
 		CE84D3F722F1C5D00012BA85 /* Helper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Helper.cpp; sourceTree = "<group>"; };
 		CE84D3F822F1C5D00012BA85 /* Helper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Helper.hpp; sourceTree = "<group>"; };
 		CE84D3FB22F1C7AD0012BA85 /* Candidate.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Candidate.hpp; sourceTree = "<group>"; };
+		CE84D3FD22F47CC70012BA85 /* Visualizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Visualizer.cpp; sourceTree = "<group>"; };
+		CE84D3FE22F47CC70012BA85 /* Visualizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Visualizer.hpp; sourceTree = "<group>"; };
 		CEDABA0722F1A75500DF9D4B /* local-hough-line-cpp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "local-hough-line-cpp"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEDABA0A22F1A75500DF9D4B /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -180,6 +183,8 @@
 				CE84D3F822F1C5D00012BA85 /* Helper.hpp */,
 				CE84D3F722F1C5D00012BA85 /* Helper.cpp */,
 				CE84D3FB22F1C7AD0012BA85 /* Candidate.hpp */,
+				CE84D3FE22F47CC70012BA85 /* Visualizer.hpp */,
+				CE84D3FD22F47CC70012BA85 /* Visualizer.cpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -241,6 +246,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE84D3C222F1BCBF0012BA85 /* LineFinder.cpp in Sources */,
+				CE84D3FF22F47CC70012BA85 /* Visualizer.cpp in Sources */,
 				CEDABA0B22F1A75500DF9D4B /* main.cpp in Sources */,
 				CE84D3F922F1C5D00012BA85 /* Helper.cpp in Sources */,
 			);
