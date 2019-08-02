@@ -1,1 +1,1 @@
-# faster-hough-line-cpp
+# local-hough-line-cpp

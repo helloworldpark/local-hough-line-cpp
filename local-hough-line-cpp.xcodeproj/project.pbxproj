@@ -81,7 +81,7 @@
 		CE84D3F722F1C5D00012BA85 /* Helper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Helper.cpp; sourceTree = "<group>"; };
 		CE84D3F822F1C5D00012BA85 /* Helper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Helper.hpp; sourceTree = "<group>"; };
 		CE84D3FB22F1C7AD0012BA85 /* Candidate.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Candidate.hpp; sourceTree = "<group>"; };
-		CEDABA0722F1A75500DF9D4B /* faster-hough-line-cpp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "faster-hough-line-cpp"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CEDABA0722F1A75500DF9D4B /* local-hough-line-cpp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "local-hough-line-cpp"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEDABA0A22F1A75500DF9D4B /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -166,7 +166,7 @@
 		CEDABA0822F1A75500DF9D4B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CEDABA0722F1A75500DF9D4B /* faster-hough-line-cpp */,
+				CEDABA0722F1A75500DF9D4B /* local-hough-line-cpp */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -187,9 +187,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		CEDABA0622F1A75500DF9D4B /* faster-hough-line-cpp */ = {
+		CEDABA0622F1A75500DF9D4B /* local-hough-line-cpp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CEDABA0E22F1A75500DF9D4B /* Build configuration list for PBXNativeTarget "faster-hough-line-cpp" */;
+			buildConfigurationList = CEDABA0E22F1A75500DF9D4B /* Build configuration list for PBXNativeTarget "local-hough-line-cpp" */;
 			buildPhases = (
 				CEDABA0322F1A75500DF9D4B /* Sources */,
 				CEDABA0422F1A75500DF9D4B /* Frameworks */,
@@ -199,9 +199,9 @@
 			);
 			dependencies = (
 			);
-			name = "faster-hough-line-cpp";
+			name = "local-hough-line-cpp";
 			productName = "faster-hough-line-cpp";
-			productReference = CEDABA0722F1A75500DF9D4B /* faster-hough-line-cpp */;
+			productReference = CEDABA0722F1A75500DF9D4B /* local-hough-line-cpp */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -218,7 +218,7 @@
 					};
 				};
 			};
-			buildConfigurationList = CEDABA0222F1A75500DF9D4B /* Build configuration list for PBXProject "faster-hough-line-cpp" */;
+			buildConfigurationList = CEDABA0222F1A75500DF9D4B /* Build configuration list for PBXProject "local-hough-line-cpp" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -230,7 +230,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				CEDABA0622F1A75500DF9D4B /* faster-hough-line-cpp */,
+				CEDABA0622F1A75500DF9D4B /* local-hough-line-cpp */,
 			);
 		};
 /* End PBXProject section */
@@ -489,7 +489,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		CEDABA0222F1A75500DF9D4B /* Build configuration list for PBXProject "faster-hough-line-cpp" */ = {
+		CEDABA0222F1A75500DF9D4B /* Build configuration list for PBXProject "local-hough-line-cpp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CEDABA0C22F1A75500DF9D4B /* Debug */,
@@ -498,7 +498,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CEDABA0E22F1A75500DF9D4B /* Build configuration list for PBXNativeTarget "faster-hough-line-cpp" */ = {
+		CEDABA0E22F1A75500DF9D4B /* Build configuration list for PBXNativeTarget "local-hough-line-cpp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CEDABA0F22F1A75500DF9D4B /* Debug */,
