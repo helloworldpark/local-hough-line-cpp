@@ -37,7 +37,7 @@ LineFinder::~LineFinder() {
 cv::Mat& LineFinder::runStandardHough() {
     releaseImage(&_result);
     
-    auto start = std::chrono::system_clock::now();
+    Timer timer("Standard Hough");
     
     std::vector<cv::Vec3f> lines;
     cv::HoughLines(*_worksheet,
@@ -46,9 +46,7 @@ cv::Mat& LineFinder::runStandardHough() {
                    CV_PI / params.houghResolutionTheta,
                    params.houghThreshold());
     
-    auto end = std::chrono::system_clock::now();
-    std::chrono::duration<double> diff = end - start;
-    std::cout << "Standard Hough: " << diff.count() << std::endl;
+    timer.stop();
     
     _result = new cv::Mat(_worksheet->size(), CV_8UC3);
     cv::cvtColor(*_worksheet, *_result, cv::COLOR_GRAY2BGR);
@@ -63,7 +61,7 @@ cv::Mat& LineFinder::runStandardHough() {
 cv::Mat& LineFinder::runStandardLocalHough() {
     releaseImage(&_result);
     
-    auto start = std::chrono::system_clock::now();
+    Timer timer("Standard Local Hough");
     
     std::vector<cv::Vec3f> lines;
     cv::HoughLines(*_worksheet,
@@ -96,9 +94,7 @@ cv::Mat& LineFinder::runStandardLocalHough() {
         }
     }
     
-    auto end = std::chrono::system_clock::now();
-    std::chrono::duration<double> diff = end - start;
-    std::cout << "Standard-Local Hough: " << diff.count() << std::endl;
+    timer.stop();
     
     
     _result = new cv::Mat(_worksheet->size(), CV_8UC3);
@@ -114,7 +110,7 @@ cv::Mat& LineFinder::runStandardLocalHough() {
 cv::Mat& LineFinder::runNaiveLocalHough() {
     releaseImage(&_result);
     
-    auto start = std::chrono::system_clock::now();
+    Timer timer("Naive Local Hough");
     
     // Prepare cos, sin
     std::vector<Angle> trigs;
@@ -130,12 +126,10 @@ cv::Mat& LineFinder::runNaiveLocalHough() {
     
     float diagonalAngle = atan2(_worksheet->rows, _worksheet->cols);
     cv::Size imgSize = cv::Size(_worksheet->cols, _worksheet->rows);
+    int threshold = params.houghLocalThreshold();
     
     std::vector<Line> lines;
     // Iterate for theta
-    double ttFind = 0.0;
-    
-    int threshold = params.houghLocalThreshold();
     for (auto& theta: trigs) {
         // Iterate for rho
         for (auto& rho: rhos) {
@@ -147,21 +141,14 @@ cv::Mat& LineFinder::runNaiveLocalHough() {
             
             Line line;
             // If success to find a line, append it
-            auto didFindStart = std::chrono::system_clock::now();
             bool didFind = didFindLine(_worksheet, rho, theta, line, threshold);
-            auto didFindEnd = std::chrono::system_clock::now();
-            std::chrono::duration<double> diff = didFindEnd - didFindStart;
-            ttFind += diff.count();
             if (didFind) {
                 lines.push_back(line);
             }
         }
     }
     
-    auto end = std::chrono::system_clock::now();
-    std::chrono::duration<double> diff = end - start;
-    std::cout << "Faster Hough: " << diff.count() << std::endl;
-    std::cout << " -didFindLine: " << ttFind << std::endl;
+    timer.stop();
     
     // Plot
     _result = new cv::Mat(_worksheet->size(), CV_8UC3);

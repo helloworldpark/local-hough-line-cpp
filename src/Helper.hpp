@@ -9,10 +9,40 @@
 #ifndef Helper_hpp
 #define Helper_hpp
 
-#include <stdio.h>
+#include <iostream>
+#include <string>
+#include <chrono>
 #include <opencv2/core.hpp>
 
 namespace fh {
+    
+    typedef std::chrono::time_point<std::chrono::steady_clock> Time;
+    typedef std::chrono::duration<std::chrono::nanoseconds> Nanoseconds;
+    
+    class Timer {
+        constexpr static const double million = 1000000.0;
+    public:
+        Timer(std::string name) {
+            this->name = name;
+            start();
+        }
+        
+        void start() {
+            timeStart = std::chrono::steady_clock::now();
+        }
+        
+        void stop() {
+            timeEnd = std::chrono::steady_clock::now();
+            auto rawElapsed = timeEnd - timeStart;
+            std::cout << "[Timer] " << name << ": " << rawElapsed.count() / million << "ms" << std::endl;
+        }
+    private:
+        Time timeStart;
+        Time timeEnd;
+        std::string name;
+    };
+    
+    
     cv::Size getProcessingSize(cv::Mat& image, int minLength);
     
     void releaseImage(cv::Mat** image);
