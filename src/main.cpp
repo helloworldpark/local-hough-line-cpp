@@ -30,7 +30,7 @@ int main(int argc, const char * argv[]) {
     cv::namedWindow("Standard Hough");
     cv::imshow("Standard Hough", standardHough);
     
-    cv::Mat& fastHough = lineFinder->runFasterHough();
+    cv::Mat& fastHough = lineFinder->runNaiveLocalHough();
     cv::namedWindow("Fast Hough");
     cv::imshow("Fast Hough", fastHough);
     cv::waitKey(0);

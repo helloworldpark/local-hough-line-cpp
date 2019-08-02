@@ -69,7 +69,8 @@ namespace fh {
         ~LineFinder();
         
         cv::Mat& runStandardHough();
-        cv::Mat& runFasterHough();
+        cv::Mat& runStandardLocalHough();
+        cv::Mat& runNaiveLocalHough();
     };
 }
 

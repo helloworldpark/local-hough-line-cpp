@@ -46,6 +46,32 @@ cv::Mat& LineFinder::runStandardHough() {
                    CV_PI / params.houghResolutionTheta,
                    params.houghThreshold());
     
+    auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double> diff = end - start;
+    std::cout << "Standard Hough: " << diff.count() << std::endl;
+    
+    _result = new cv::Mat(_worksheet->size(), CV_8UC3);
+    cv::cvtColor(*_worksheet, *_result, cv::COLOR_GRAY2BGR);
+
+    for (auto& line: lines) {
+        drawHoughLine(*_result, line);
+    }
+    
+    return *_result;
+}
+
+cv::Mat& LineFinder::runStandardLocalHough() {
+    releaseImage(&_result);
+    
+    auto start = std::chrono::system_clock::now();
+    
+    std::vector<cv::Vec3f> lines;
+    cv::HoughLines(*_worksheet,
+                   lines,
+                   params.houghResolutionRho,
+                   CV_PI / params.houghResolutionTheta,
+                   params.houghThreshold());
+    
     // Filter candidate lines by testing locality
     // Prepare trigonometric function table for faster calculation
     std::vector<Angle> trigs;
@@ -53,7 +79,6 @@ cv::Mat& LineFinder::runStandardHough() {
     
     // Test each line for locality
     int localThreshold = params.houghLocalThreshold();
-    double thetaErr = CV_PI / (double)params.houghResolutionTheta;
     std::vector<Line> realLines;
     for (auto& line: lines) {
         Line realLine;
@@ -73,12 +98,12 @@ cv::Mat& LineFinder::runStandardHough() {
     
     auto end = std::chrono::system_clock::now();
     std::chrono::duration<double> diff = end - start;
-    std::cout << "Standard Hough: " << diff.count() << std::endl;
+    std::cout << "Standard-Local Hough: " << diff.count() << std::endl;
     
     
     _result = new cv::Mat(_worksheet->size(), CV_8UC3);
     cv::cvtColor(*_worksheet, *_result, cv::COLOR_GRAY2BGR);
-
+    
     for (auto& line: realLines) {
         drawHoughLine(*_result, line);
     }
@@ -86,7 +111,7 @@ cv::Mat& LineFinder::runStandardHough() {
     return *_result;
 }
 
-cv::Mat& LineFinder::runFasterHough() {
+cv::Mat& LineFinder::runNaiveLocalHough() {
     releaseImage(&_result);
     
     auto start = std::chrono::system_clock::now();
