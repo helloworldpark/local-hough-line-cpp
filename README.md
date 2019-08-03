@@ -63,15 +63,15 @@ This method is quite simple, but found that it gives a quite acceptable result. 
 
 <p float="left">
 <!--    <figure>-->
-    <img align="left" width="225" height="300" src="images/results/test27_stdHough.png">
+<img width="225" height="300" src="images/test27.jpg">
 <!--    <figcaption>Standard Hough</figcaption>-->
 <!--    </figure>-->
 <!--    <figure>-->
-<img align="center" width="225" height="300" src="images/test27.jpg">
+    <img width="225" height="300" src="images/results/test27_stdHough.png">
 <!--    <figcaption>Original</figcaption>-->
 <!--    </figure>-->
 <!--    <figure>-->
-    <img align="right" width="225" height="300" src="images/results/test27_stdLocalHough.png">
+    <img width="225" height="300" src="images/results/test27_stdLocalHough.png">
 <!--    <figcaption>Standard Hough + Locality Test</figcaption>-->
 <!--    </figure>-->
 </p>
