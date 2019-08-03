@@ -84,6 +84,10 @@
 		CE84D3FB22F1C7AD0012BA85 /* Candidate.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Candidate.hpp; sourceTree = "<group>"; };
 		CE84D3FD22F47CC70012BA85 /* Visualizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Visualizer.cpp; sourceTree = "<group>"; };
 		CE84D3FE22F47CC70012BA85 /* Visualizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Visualizer.hpp; sourceTree = "<group>"; };
+		CE84D40222F546EA0012BA85 /* test27_stdHough.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test27_stdHough.png; sourceTree = "<group>"; };
+		CE84D40322F546EA0012BA85 /* test27_stdLocalHough.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test27_stdLocalHough.png; sourceTree = "<group>"; };
+		CE84D40422F547FE0012BA85 /* test25_stdLocalHough.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test25_stdLocalHough.png; sourceTree = "<group>"; };
+		CE84D40522F547FE0012BA85 /* test25_stdHough.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test25_stdHough.png; sourceTree = "<group>"; };
 		CEDABA0722F1A75500DF9D4B /* local-hough-line-cpp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "local-hough-line-cpp"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEDABA0A22F1A75500DF9D4B /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -102,6 +106,7 @@
 		CE84D3C322F1BD6C0012BA85 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				CE84D40122F5430F0012BA85 /* results */,
 				CE84D3C722F1BDE10012BA85 /* test0.jpg */,
 				CE84D3CA22F1BDE10012BA85 /* test1.jpg */,
 				CE84D3D022F1BDE10012BA85 /* test2.jpg */,
@@ -155,6 +160,17 @@
 				CE84D3E722F1BDE20012BA85 /* test50.jpg */,
 			);
 			path = images;
+			sourceTree = "<group>";
+		};
+		CE84D40122F5430F0012BA85 /* results */ = {
+			isa = PBXGroup;
+			children = (
+				CE84D40522F547FE0012BA85 /* test25_stdHough.png */,
+				CE84D40422F547FE0012BA85 /* test25_stdLocalHough.png */,
+				CE84D40222F546EA0012BA85 /* test27_stdHough.png */,
+				CE84D40322F546EA0012BA85 /* test27_stdLocalHough.png */,
+			);
+			path = results;
 			sourceTree = "<group>";
 		};
 		CEDAB9FE22F1A75500DF9D4B = {

@@ -16,6 +16,8 @@ namespace fh {
     void show(std::string name, cv::Mat& image0);
     void show(std::string name, cv::Mat& image0, cv::Mat& image1);
     void waitKey();
+    
+    bool save(std::string& name, cv::Mat& image);
 }
 
 #endif /* Visualizer_hpp */
