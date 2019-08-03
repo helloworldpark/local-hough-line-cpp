@@ -9,7 +9,6 @@
 #ifndef FasterHough_hpp
 #define FasterHough_hpp
 
-#include <string>
 #include <vector>
 #include <opencv2/core.hpp>
 
@@ -31,10 +30,6 @@ namespace fh {
         
         int houghResolutionTheta = 360;
         int houghResolutionRho = 1;
-        
-        int minCountKDE = 10;
-        int thetaTolerance = 12;
-        bool verbose = false;
         
         inline int houghThreshold() {
             return int(worksheetLength / 3);
@@ -59,7 +54,6 @@ namespace fh {
         static bool isFindingMeaningful(cv::Size& imageSize, float rho, cv::Vec3f& theta, float diagonalAngle);
         static bool didFindLine(cv::Mat* image, float rho, cv::Vec3f& theta, cv::Vec3f& line, int& threshold);
         static bool isLine(cv::Mat* image, cv::Point& p);
-        static cv::Vec3f convertFriendly(cv::Vec3f& line);
         
         inline double diagonalAngle() { return _diagonalAngle; }
         inline double diagonalLength() { return _diagonalLength; }

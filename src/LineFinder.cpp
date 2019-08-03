@@ -6,12 +6,13 @@
 //  Copyright © 2019 Sean Park. All rights reserved.
 //
 
-#include "LineFinder.hpp"
-#include "Helper.hpp"
-#include <opencv2/imgproc.hpp>
 #include <chrono>
 #include <iostream>
+#include <string>
 #include <fast_math.hpp>
+#include <opencv2/imgproc.hpp>
+#include "LineFinder.hpp"
+#include "Helper.hpp"6
 
 
 using namespace fh;
@@ -297,10 +298,6 @@ void LineFinder::preprocess(cv::Mat* rawImage) {
 
 cv::Mat& LineFinder::preprocessedImage() {
     return *_worksheet;
-}
-
-cv::Vec3f LineFinder::convertFriendly(cv::Vec3f& line) {
-    return cv::Vec3f(line[0], 90.0f - line[0] * (CV_PI / 180.0f), line[2]);
 }
 
 void LineFinder::prepareCosSin(std::vector<Angle>& table) {
