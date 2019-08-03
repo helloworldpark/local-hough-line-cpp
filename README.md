@@ -60,9 +60,19 @@ for (int i = 0; i < iterator.count; i++, ++iterator) {
 ```
 
 This method is quite simple, but found that it gives a quite acceptable result. Have a look.
-<img align="left" width="300" height="400" src="images/results/test27_stdHough.png">
-<img align="center" width="300" height="400" src="images/test27.jpg">
-<img align="right" width="300" height="400" src="images/results/test27_stdLocalHough.png">
+<figure>
+    <img align="left" width="225" height="300" src="images/test27.jpg">
+    <figcaption>Original</figcaption>
+</figure>
+<figure>
+    <img align="center" width="225" height="300" src="images/results/test27_stdHough.png">
+    <figcaption>Standard Hough</figcaption>
+</figure>
+<figure>
+    <img align="right" width="225" height="300" src="images/results/test27_stdLocalHough.png">
+    <figcaption>Standard Hough + Locality Test</figcaption>
+</figure>
+
 
 
 ### Drawbacks
