@@ -64,11 +64,11 @@ This method is quite simple, but found that it gives a quite acceptable result. 
 <p float="left">
     <figure>
     <img width="225" height="300" src="images/test27.jpg">
-    <figcaption>Standard Hough</figcaption>
+    <figcaption>Original</figcaption>
     </figure>
     <figure>
     <img width="225" height="300" src="images/results/test27_stdHough.png">
-    <figcaption>Original</figcaption>
+    <figcaption>Standard Hough</figcaption>
     </figure>
     <figure>
     <img width="225" height="300" src="images/results/test27_stdLocalHough.png">
