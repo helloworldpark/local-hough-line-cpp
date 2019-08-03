@@ -22,7 +22,7 @@ Didn't write Makefiles yet. Probably will write if there are enough needs.
 
 ## Concept
 
-This project aims to find lines more close to reality by measuring **locality***.
+This project aims to find lines more close to reality by measuring **locality**.
 
 
 ### Standard Hough Line Detection
@@ -89,29 +89,34 @@ This method is quite simple, but found that it gives a quite acceptable result. 
 | Original | Standard Hough | Standard Hough + Locality Test |
 
 
+### Performance
+
+It depends on hardware and the input image, but usually slightly slower than the Standard Hough Line Detection only. Obviously, it becomes even slow if the Hough has found a bunch of lines from the image. Else, it seems to be not that slow.
+
+
 ### Drawbacks
 
 Of course, this method has limitations. 
 
 First, it highly relies on Standard Hough Line Detection. So, it is important to calibrate Hough parameters so that it detects lines well.
 
-Second, it may skip some short lines if the length is smaller than the threshold. 
+Second, it may skip some short lines if its length is smaller than the threshold. 
 
-Third, it is not that robust to errors. In real world's images, the edge detector usually fails to extract the exact edges. So actual line might look to be broken, or wiggled. This can hinder the line detector's performance.
+Third, it is not that robust to errors. In real world's images, the edge detector usually fails to extract the exact edges. So actual line might look to be broken, or wiggled. This can hinder the local line detector's performance.
 
 Fourth, there are very many parameters to calibrate. Including pre-processing, there are 9 parameters that can be controlled in this project.
 
 
 ### Pre-processing
 
-It is very important to pre-process the image so that the edge detector works well. In this project, the pre-processing is done by following.
+It is very important to pre-process the image so that the edge detector works well. In this project, the pre-processing is done by the following order:
 
   1. Reduce size
   2. Smooth image using Bilateral Filtering
   3. Grayscale image
   4. Extract edge using Canny Edge Detector
   
-All of the pre-processing can be done very easily by OpenCV.
+All of the pre-processing procedures can be done very easily using OpenCV.
 
 
 ## Contributions
