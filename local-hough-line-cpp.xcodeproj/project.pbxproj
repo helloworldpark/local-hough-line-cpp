@@ -81,7 +81,6 @@
 		CE84D3F622F1BDE30012BA85 /* test47.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test47.jpg; sourceTree = "<group>"; };
 		CE84D3F722F1C5D00012BA85 /* Helper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Helper.cpp; sourceTree = "<group>"; };
 		CE84D3F822F1C5D00012BA85 /* Helper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Helper.hpp; sourceTree = "<group>"; };
-		CE84D3FB22F1C7AD0012BA85 /* Candidate.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Candidate.hpp; sourceTree = "<group>"; };
 		CE84D3FD22F47CC70012BA85 /* Visualizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Visualizer.cpp; sourceTree = "<group>"; };
 		CE84D3FE22F47CC70012BA85 /* Visualizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Visualizer.hpp; sourceTree = "<group>"; };
 		CE84D40222F546EA0012BA85 /* test27_stdHough.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test27_stdHough.png; sourceTree = "<group>"; };
@@ -262,7 +261,6 @@
 				CE84D3C022F1BCBF0012BA85 /* LineFinder.cpp */,
 				CE84D3F822F1C5D00012BA85 /* Helper.hpp */,
 				CE84D3F722F1C5D00012BA85 /* Helper.cpp */,
-				CE84D3FB22F1C7AD0012BA85 /* Candidate.hpp */,
 				CE84D3FE22F47CC70012BA85 /* Visualizer.hpp */,
 				CE84D3FD22F47CC70012BA85 /* Visualizer.cpp */,
 			);
