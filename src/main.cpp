@@ -32,17 +32,20 @@ int main(int argc, const char * argv[]) {
     const std::string imgResultDir("images/results/");
     
     cv::Mat& standardHough = lineFinder->runStandardHough();
-    fh::show("Standard Hough", lineFinder->preprocessedImage(), standardHough);
+    fh::show("Standard Hough(Left-click for results)", lineFinder->preprocessedImage(), standardHough);
     std::string saveStandardHough = imgResultDir + imgName + "_stdHough.png";
     fh::save(saveStandardHough, standardHough);
     
     cv::Mat& standardLocalHough = lineFinder->runStandardLocalHough();
-    fh::show("Standard Local Hough", lineFinder->preprocessedImage(), standardLocalHough);
+    fh::show("Standard Local Hough(Left-click for results)", lineFinder->preprocessedImage(), standardLocalHough);
     std::string saveStandardLocalHough = imgResultDir + imgName + "_stdLocalHough.png";
     fh::save(saveStandardLocalHough, standardLocalHough);
     
-//    cv::Mat& naiveLocalHough = lineFinder->runNaiveLocalHough();
-//    fh::show("Naive Local Hough", lineFinder->preprocessedImage(), naiveLocalHough);
+    cv::Mat& naiveLocalHough = lineFinder->runNaiveLocalHough();
+    fh::show("Naive Local Hough(Left-click for results)", lineFinder->preprocessedImage(), naiveLocalHough);
+    std::string saveNaiveLocalHough = imgResultDir + imgName + "_naiveLocalHough.png";
+    fh::save(saveNaiveLocalHough, naiveLocalHough);
+    
     fh::waitKey();
 
     delete lineFinder;

@@ -17,12 +17,11 @@ namespace fh {
     static std::unordered_map<std::string, std::pair<cv::Mat, cv::Mat>> nameImage;
     
     static void onMouseCallback(int event, int x, int y, int flags, void* userdata) {
-        std::string name((char*)userdata);
-        
+        std::string name((char *)userdata);
         if (event == cv::EVENT_LBUTTONUP) {
-            cv::imshow(name, nameImage[name].first);
+            cv::imshow(name, (nameImage[name].first));
         } else if (event == cv::EVENT_LBUTTONDOWN) {
-            cv::imshow(name, nameImage[name].second);
+            cv::imshow(name, (nameImage[name].second));
         }
     }
     
@@ -32,17 +31,31 @@ namespace fh {
     }
     
     void show(std::string name, cv::Mat& image0, cv::Mat& image1) {
-        cv::Mat image0Copy(image0);
-        cv::Mat image1Copy(image1);
-        nameImage[name] = std::make_pair(image0Copy, image1Copy);
+        image0.addref();
+        image1.addref();
+        nameImage[name] = std::make_pair(image0, image1);
         cv::namedWindow(name);
         
-        cv::setMouseCallback(name, onMouseCallback, (void*)name.c_str());
+        char* nameChar = new char[name.length() + 1];
+        std::copy(name.c_str(), name.c_str() + strlen(name.c_str()), nameChar);
+        cv::setMouseCallback(name, onMouseCallback, (void*)nameChar);
         cv::imshow(name, image0);
+    }
+    
+    void close(std::string name) {
+        cv::destroyWindow(name);
+        
+        std::pair<cv::Mat, cv::Mat> imgs = nameImage[name];
+        imgs.first.release();
+        imgs.second.release();
+        nameImage.erase(name);
     }
     
     void waitKey() {
         cv::waitKey(0);
+        for (auto keyValue: nameImage) {
+            close(keyValue.first);
+        }
     }
     
     // https://docs.opencv.org/4.1.1/d4/da8/group__imgcodecs.html#gabbc7ef1aa2edfaa87772f1202d67e0ce
