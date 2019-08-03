@@ -61,20 +61,9 @@ for (int i = 0; i < iterator.count; i++, ++iterator) {
 
 This method is quite simple, but found that it gives a quite acceptable result. Have a look.
 
-<p>
-<!--    <figure style="horizontal-align:left">-->
-    <img width="225" height="300" src="images/test27.jpg" title="mama">
-<!--    <figcaption>Original</figcaption>-->
-<!--    </figure>-->
-<!--    <figure style="horizontal-align:left">-->
-    <img width="225" height="300" src="images/results/test27_stdHough.png">
-<!--    <figcaption>Standard Hough</figcaption>-->
-<!--    </figure>-->
-<!--    <figure style="horizontal-align:left">-->
-    <img width="225" height="300" src="images/results/test27_stdLocalHough.png">
-<!--    <figcaption>Standard Hough + Locality Test</figcaption>-->
-<!--    </figure>-->
-</p>
+| ![Original](images/result/test27_orig.png) | ![Standard Hough](images/results/test27_stdHough.png) | ![Standard Hough + Locality Test](images/results/test27_stdLocalHough.png) |
+|:---:|:---:|:---:|
+| Original | Standard Hough | Standard Hough + Locality Test |
 
 
 ### Drawbacks
