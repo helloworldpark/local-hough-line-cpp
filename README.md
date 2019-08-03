@@ -1,6 +1,6 @@
 # local-hough-line-cpp
 
-A simple idea to detect more realistic lines using Hough Transform and testing locality.
+Demo of a simple idea to detect more realistic lines using Hough Transform and testing locality.
 
 
 ## TL;DR
