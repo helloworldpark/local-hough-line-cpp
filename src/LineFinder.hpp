@@ -21,10 +21,10 @@ namespace fh {
     public:
         int worksheetLength = 300;
         
-        int bilateralColorS = 150;
-        int bilateralSpaceS = 5;
+        int bilateralColorS = 300;
+        int bilateralSpaceS = 7;
         
-        int cannyAperture = 7;
+        int cannyAperture = 5;
         int cannyThreshold1 = 100;
         int cannyThreshold2 = 200;
         bool cannyUseL2Gradient = true;

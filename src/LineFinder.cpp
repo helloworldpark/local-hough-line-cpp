@@ -188,14 +188,11 @@ bool LineFinder::didFindLine(cv::Mat* image, float rho, Angle& theta, Line& line
     double tcos = theta[1];
     double tsin = theta[2];
     
-    float multiplier = MAX(image->rows, image->cols);
+    int multiplier = MAX(image->rows, image->cols);
     cv::Point2f center(rho * tcos, rho * tsin);
-    cv::Point2f direction(multiplier * tcos, multiplier * tsin);
     
     cv::Point pt0(cvRound(center.x - multiplier * tsin), cvRound(center.y + multiplier * tcos));
     cv::Point pt1(cvRound(center.x + multiplier * tsin), cvRound(center.y - multiplier * tcos));
-    
-//    std::cout << "Rho: " << rho << ", Theta: " << (int)(theta[0] * (1800.0 / CV_PI)) << ", pt0(" << pt0.x << ", " << pt0.y << "), pt1(" << pt1.x << ", " << pt1.y << ")" << std::endl;
     
     line[0] = rho;
     line[1] = theta[0];
@@ -207,23 +204,23 @@ bool LineFinder::didFindLine(cv::Mat* image, float rho, Angle& theta, Line& line
         return false;
     }
     
+    int votes = 0;
     for (int i = 0; i < iterator.count; i++, ++iterator) {
         cv::Point pos = iterator.pos();
         bool isPointLine = (*iterator.ptr != 0) || isLine(image, pos);
 
         if (isPointLine) {
             // Accumulate votes
-            line[2] += 1;
+            ++votes;
         } else {
-            if (line[2] <= threshold) {
-                // If votes are lower than threshold
-                // Discard
-                line[2] = 0;
-            } else {
-                // Else
-                // Found a line, finish
-                break;
+            // If votes are bigger than threshold
+            // Append to line candidate's votes
+            // Else
+            // Discard
+            if (votes > threshold) {
+                line[2] += votes;
             }
+            votes = 0;
         }
     }
     return line[2] > threshold;
@@ -232,11 +229,11 @@ bool LineFinder::didFindLine(cv::Mat* image, float rho, Angle& theta, Line& line
 
 
 bool LineFinder::isLine(cv::Mat* image, cv::Point& p) {
-    if (p.x == 0 || p.x == image->cols) {
+    if (p.x <= 0 || p.x >= image->cols - 1) {
         return false;
     }
     
-    if (p.y == 0 || p.y == image->rows) {
+    if (p.y <= 0 || p.y >= image->rows - 1) {
         return false;
     }
     uchar* data = nullptr;
@@ -273,8 +270,8 @@ void LineFinder::preprocess(cv::Mat* rawImage) {
     cv::resize(*rawImage, *resized, size);
     // Bilateral
     cv::Mat* bilateral = new cv::Mat(resized->size(), resized->type());
-//    cv::bilateralFilter(*resized, *bilateral, 0, params.bilateralColorS, params.bilateralSpaceS);
-    cv::GaussianBlur(*resized, *bilateral, cv::Size(7, 7), params.bilateralColorS);
+    cv::bilateralFilter(*resized, *bilateral, params.bilateralSpaceS, params.bilateralColorS, params.bilateralSpaceS);
+//    cv::GaussianBlur(*resized, *bilateral, cv::Size(7, 7), params.bilateralColorS);
     resized->release();
     // Grayscale
     
