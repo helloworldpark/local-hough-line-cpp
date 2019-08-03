@@ -63,7 +63,7 @@ This method is quite simple, but found that it gives a quite acceptable result. 
 
 <p>
 <!--    <figure style="horizontal-align:left">-->
-    <img width="225" height="300" src="images/test27.jpg" alt="mama">
+    <img width="225" height="300" src="images/test27.jpg" title="mama">
 <!--    <figcaption>Original</figcaption>-->
 <!--    </figure>-->
 <!--    <figure style="horizontal-align:left">-->
