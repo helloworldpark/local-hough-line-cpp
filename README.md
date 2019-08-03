@@ -61,7 +61,7 @@ for (int i = 0; i < iterator.count; i++, ++iterator) {
 
 This method is quite simple, but found that it gives a quite acceptable result. Have a look.
 
-| ![Original](images/result/test27_orig.png) | ![Standard Hough](images/results/test27_stdHough.png) | ![Standard Hough + Locality Test](images/results/test27_stdLocalHough.png) |
+| ![Original](images/results/test27_orig.png) | ![Standard Hough](images/results/test27_stdHough.png) | ![Standard Hough + Locality Test](images/results/test27_stdLocalHough.png) |
 |:---:|:---:|:---:|
 | Original | Standard Hough | Standard Hough + Locality Test |
 
