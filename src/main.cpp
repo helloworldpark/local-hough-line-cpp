@@ -15,7 +15,7 @@
 int main(int argc, const char * argv[]) {
     
     const std::string imgDir("images/");
-    const std::string imgName("test25");
+    const std::string imgName("test1");
     const std::string imgExt(".jpg");
     
     std::string imgSrcPath = imgDir + imgName + imgExt;

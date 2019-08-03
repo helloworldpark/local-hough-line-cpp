@@ -88,6 +88,10 @@
 		CE84D40322F546EA0012BA85 /* test27_stdLocalHough.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test27_stdLocalHough.png; sourceTree = "<group>"; };
 		CE84D40422F547FE0012BA85 /* test25_stdLocalHough.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test25_stdLocalHough.png; sourceTree = "<group>"; };
 		CE84D40522F547FE0012BA85 /* test25_stdHough.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test25_stdHough.png; sourceTree = "<group>"; };
+		CE84D40622F548A20012BA85 /* test0_stdHough.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test0_stdHough.png; sourceTree = "<group>"; };
+		CE84D40722F548A20012BA85 /* test0_stdLocalHough.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test0_stdLocalHough.png; sourceTree = "<group>"; };
+		CE84D40822F548DE0012BA85 /* test1_stdLocalHough.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test1_stdLocalHough.png; sourceTree = "<group>"; };
+		CE84D40922F548DE0012BA85 /* test1_stdHough.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test1_stdHough.png; sourceTree = "<group>"; };
 		CEDABA0722F1A75500DF9D4B /* local-hough-line-cpp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "local-hough-line-cpp"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEDABA0A22F1A75500DF9D4B /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -165,6 +169,10 @@
 		CE84D40122F5430F0012BA85 /* results */ = {
 			isa = PBXGroup;
 			children = (
+				CE84D40922F548DE0012BA85 /* test1_stdHough.png */,
+				CE84D40822F548DE0012BA85 /* test1_stdLocalHough.png */,
+				CE84D40622F548A20012BA85 /* test0_stdHough.png */,
+				CE84D40722F548A20012BA85 /* test0_stdLocalHough.png */,
 				CE84D40522F547FE0012BA85 /* test25_stdHough.png */,
 				CE84D40422F547FE0012BA85 /* test25_stdLocalHough.png */,
 				CE84D40222F546EA0012BA85 /* test27_stdHough.png */,
