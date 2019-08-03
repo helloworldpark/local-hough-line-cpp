@@ -1,11 +1,11 @@
 # local-hough-line-cpp
 
-A simple method to detect lines using Hough Transform and testing locality.
+A simple idea to detect more realistic lines using Hough Transform and testing locality.
 
 
 ## TL;DR
 
-Look at [```LineFinder::runStandardLocalHough()```](https://github.com/helloworldpark/local-hough-line-cpp/blob/876763c3c94a66db57e30bb1d2e31f196039c41b/src/LineFinder.cpp#L61). After running ```cv::HoughLines```, filters the result by locality, i.e. whether the candidate line has any consecutive pixels passing through.
+Look at [```LineFinder::runStandardLocalHough()```](https://github.com/helloworldpark/local-hough-line-cpp/blob/876763c3c94a66db57e30bb1d2e31f196039c41b/src/LineFinder.cpp#L61). After running ```cv::HoughLines```, the function filters the result by locality, i.e. whether the candidate line lies on any continuous pixels.
 
 
 ### Xcode users
@@ -36,8 +36,10 @@ The problem is, ```rho```s can get vote from everywhere on the image.  This may 
 
 ### Testing Locality
 
-The remedy I thought was simple: for each candidate from ```cv::HoughLines```, test if there are any connected segments in the line. To be more specific, iterate all the points along the line, and increase a count if it is an edge. If the edge ended, choose whether to reset the count or not: if the count is more than a threshold, keep the value since it means the candidate is at least **locally** a line. If not, reset the count and keep iterating.
+The remedy I thought was simple: for each candidate from ```cv::HoughLines```, test if there are any connected segments in the line. To be more specific, iterate all the points along the line, and increase a ```vote``` if it is an edge. If the edge ended, choose whether to reset the ```vote``` or not: if the ```vote``` is more than a threshold, keep the value since it means the candidate is at least **locally** a line. If not, reset the ```vote``` and keep iterating.
 ```c++
+// pt0, pt1 are the endpoints of the line to be iterated
+cv::LineIterator iterator(*image, pt0, pt1);
 int votes = 0;
 for (int i = 0; i < iterator.count; i++, ++iterator) {
     cv::Point pos = iterator.pos();
