@@ -62,18 +62,18 @@ for (int i = 0; i < iterator.count; i++, ++iterator) {
 This method is quite simple, but found that it gives a quite acceptable result. Have a look.
 
 <p>
-    <figure style="horizontal-align:left">
-    <img width="225" height="300" src="images/test27.jpg">
-    <figcaption>Original</figcaption>
-    </figure>
-    <figure style="horizontal-align:left">
+<!--    <figure style="horizontal-align:left">-->
+    <img width="225" height="300" src="images/test27.jpg" alt="mama">
+<!--    <figcaption>Original</figcaption>-->
+<!--    </figure>-->
+<!--    <figure style="horizontal-align:left">-->
     <img width="225" height="300" src="images/results/test27_stdHough.png">
-    <figcaption>Standard Hough</figcaption>
-    </figure>
-    <figure style="horizontal-align:left">
+<!--    <figcaption>Standard Hough</figcaption>-->
+<!--    </figure>-->
+<!--    <figure style="horizontal-align:left">-->
     <img width="225" height="300" src="images/results/test27_stdLocalHough.png">
-    <figcaption>Standard Hough + Locality Test</figcaption>
-    </figure>
+<!--    <figcaption>Standard Hough + Locality Test</figcaption>-->
+<!--    </figure>-->
 </p>
 
 
