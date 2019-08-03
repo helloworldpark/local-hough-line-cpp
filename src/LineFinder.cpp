@@ -262,13 +262,17 @@ bool LineFinder::isLine(cv::Mat* image, cv::Point& p) {
 }
 
 void LineFinder::preprocess(cv::Mat* rawImage) {
+    Timer timer("Preprocess");
     cv::Size size = getProcessingSize(*rawImage, params.worksheetLength);
     int channel = rawImage->dims;
     
     // Resize
     cv::Mat* resized = new cv::Mat(size, rawImage->type());
     cv::resize(*rawImage, *resized, size);
-    // Bilateral
+    // Bilateral or Gaussian
+    // It's just a matter of choice, I think,
+    // but Bilateral Filtering was much better for extracting lines, in average.
+    // Instead, it might be(and most of the case, yes) slower than smoothing images using Gaussian Filtering.
     cv::Mat* bilateral = new cv::Mat(resized->size(), resized->type());
     cv::bilateralFilter(*resized, *bilateral, params.bilateralSpaceS, params.bilateralColorS, params.bilateralSpaceS);
 //    cv::GaussianBlur(*resized, *bilateral, cv::Size(7, 7), params.bilateralColorS);
@@ -288,6 +292,7 @@ void LineFinder::preprocess(cv::Mat* rawImage) {
     cv::Canny(*grayImage, *edgeImage, params.cannyThreshold1, params.cannyThreshold2, params.cannyAperture, params.cannyUseL2Gradient);
     
     _worksheet = edgeImage;
+    timer.stop();
 }
 
 cv::Mat& LineFinder::preprocessedImage() {
@@ -300,22 +305,28 @@ cv::Vec3f LineFinder::convertFriendly(cv::Vec3f& line) {
 
 void LineFinder::prepareCosSin(std::vector<Angle>& table) {
     // Assume houghResolutiuonTheta is a multiple of 180
-//    table.reserve(params.houghResolutionTheta);
     
     int idx45 = (params.houghResolutionTheta / 4);
     int idx90 = (params.houghResolutionTheta / 2);
     
+    // Calculate cos, sin for [0, 45] (or [0, pi/4]
     for (int i = 0; i <= idx45; i++) {
         float theta = ((float)i) / ((float)params.houghResolutionTheta) * CV_PI;
         table.push_back(Angle(theta, cos(theta), sin(theta)));
     }
     
+    // Reuse the results
+    // cos(t + pi/4) = sin(t)
+    // sin(t + pi/4) = cos(t)
     for (int i = idx45+1; i <= idx90; i++) {
         auto& a = table[idx90 - i];
         float theta = ((float)i) / ((float)params.houghResolutionTheta) * CV_PI;
         table.push_back(Angle(theta, a[2], a[1]));
     }
     
+    // Reuse the results
+    // cos(t + pi/2) = -sin(t)
+    // sin(t + pi/2) = cos(t)
     for (int i = idx90 + 1; i < params.houghResolutionTheta; i++) {
         auto& a = table[i - idx90];
         float theta = ((float)i) / ((float)params.houghResolutionTheta) * CV_PI;

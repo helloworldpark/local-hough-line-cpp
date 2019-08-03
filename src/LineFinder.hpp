@@ -21,7 +21,7 @@ namespace fh {
     public:
         int worksheetLength = 300;
         
-        int bilateralColorS = 300;
+        int bilateralColorS = 200;
         int bilateralSpaceS = 7;
         
         int cannyAperture = 5;
