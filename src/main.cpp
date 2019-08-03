@@ -11,12 +11,14 @@
 #include <opencv2/imgcodecs.hpp>
 #include "LineFinder.hpp"
 #include "Visualizer.hpp"
+#include "Helper.hpp"
 
 int main(int argc, const char * argv[]) {
     
     const std::string imgDir("images/");
     const std::string imgName("test1");
     const std::string imgExt(".jpg");
+    const std::string imgResultDir("images/results/");
     
     std::string imgSrcPath = imgDir + imgName + imgExt;
     cv::Mat image = cv::imread(imgSrcPath, cv::IMREAD_COLOR);
@@ -26,26 +28,29 @@ int main(int argc, const char * argv[]) {
         return -1;
     }
     
+    cv::Size savingSize = fh::getProcessingSize(image, 225);
+    
     fh::show("Original", image);
     
     fh::LineFinder* lineFinder = new fh::LineFinder(&image);
     
-    const std::string imgResultDir("images/results/");
-    
     cv::Mat& standardHough = lineFinder->runStandardHough();
     fh::show("Standard Hough(Left-click for results)", lineFinder->preprocessedImage(), standardHough);
     std::string saveStandardHough = imgResultDir + imgName + "_stdHough.png";
-    fh::save(saveStandardHough, standardHough);
+    fh::save(saveStandardHough, standardHough, savingSize);
     
     cv::Mat& standardLocalHough = lineFinder->runStandardLocalHough();
     fh::show("Standard Local Hough(Left-click for results)", lineFinder->preprocessedImage(), standardLocalHough);
     std::string saveStandardLocalHough = imgResultDir + imgName + "_stdLocalHough.png";
-    fh::save(saveStandardLocalHough, standardLocalHough);
+    fh::save(saveStandardLocalHough, standardLocalHough, savingSize);
     
     cv::Mat& naiveLocalHough = lineFinder->runNaiveLocalHough();
     fh::show("Naive Local Hough(Left-click for results)", lineFinder->preprocessedImage(), naiveLocalHough);
     std::string saveNaiveLocalHough = imgResultDir + imgName + "_naiveLocalHough.png";
-    fh::save(saveNaiveLocalHough, naiveLocalHough);
+    fh::save(saveNaiveLocalHough, naiveLocalHough, savingSize);
+    
+    std::string saveOriginal = imgResultDir + imgName + "_orig.png";
+    fh::save(saveOriginal, image, savingSize);
     
     fh::waitKey();
 

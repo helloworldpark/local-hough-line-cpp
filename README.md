@@ -12,7 +12,7 @@ Look at [```LineFinder::runStandardLocalHough()```](https://github.com/helloworl
 
 Just pull the project, and run it. You may change the input image by fixing the ```main.cpp``` file.
 
-  - If you fail to read the image, please [set your working directory](https://stackoverflow.com/a/11748111/10464503) to the root directory of the project.
+  - If you fail to read the image, please try [setting your working directory](https://stackoverflow.com/a/11748111/10464503) to the root directory of the project.
 
 
 ### Others
@@ -61,7 +61,30 @@ for (int i = 0; i < iterator.count; i++, ++iterator) {
 
 This method is quite simple, but found that it gives a quite acceptable result. Have a look.
 
+#### Numabukuro Station, Tokyo, Japan
+
+| ![Original](images/results/test1_orig.png) | ![Standard Hough](images/results/test1_stdHough.png) | ![Standard Hough + Locality Test](images/results/test1_stdLocalHough.png) |
+|:---:|:---:|:---:|
+| Original | Standard Hough | Standard Hough + Locality Test |
+
+
+#### Pangyo Station, Seong-nam, South Korea
+
+| ![Original](images/results/test21_orig.png) | ![Standard Hough](images/results/test21_stdHough.png) | ![Standard Hough + Locality Test](images/results/test21_stdLocalHough.png) |
+|:---:|:---:|:---:|
+| Original | Standard Hough | Standard Hough + Locality Test |
+
+
+#### Gimpo International Airport(GMP), Seoul, South Korea
+
 | ![Original](images/results/test27_orig.png) | ![Standard Hough](images/results/test27_stdHough.png) | ![Standard Hough + Locality Test](images/results/test27_stdLocalHough.png) |
+|:---:|:---:|:---:|
+| Original | Standard Hough | Standard Hough + Locality Test |
+
+
+#### Uni Murakami, Hakodate, Japan
+
+| ![Original](images/results/test32_orig.png) | ![Standard Hough](images/results/test32_stdHough.png) | ![Standard Hough + Locality Test](images/results/test32_stdLocalHough.png) |
 |:---:|:---:|:---:|
 | Original | Standard Hough | Standard Hough + Locality Test |
 
@@ -76,7 +99,7 @@ Second, it may skip some short lines if the length is smaller than the threshold
 
 Third, it is not that robust to errors. In real world's images, the edge detector usually fails to extract the exact edges. So actual line might look to be broken, or wiggled. This can hinder the line detector's performance.
 
-Fourth, there are very many parameters to calibrate. Including pre-processing, 
+Fourth, there are very many parameters to calibrate. Including pre-processing, there are 9 parameters that can be controlled in this project.
 
 
 ### Pre-processing
@@ -89,6 +112,11 @@ It is very important to pre-process the image so that the edge detector works we
   4. Extract edge using Canny Edge Detector
   
 All of the pre-processing can be done very easily by OpenCV.
+
+
+## Contributions
+
+Please do not hesitate to comment on my code, or give a pull request! By the way, the [license is here](LICENSE).
 
 
 ## External Dependencies Used
