@@ -27,6 +27,7 @@ int main(int argc, const char * argv[]) {
     }
     
     fh::show("Original", image);
+    
     fh::LineFinder* lineFinder = new fh::LineFinder(&image);
     
     const std::string imgResultDir("images/results/");

@@ -8,6 +8,7 @@
 
 #include "Visualizer.hpp"
 #include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <unordered_map>
 #include <vector>
@@ -59,13 +60,20 @@ namespace fh {
     }
     
     // https://docs.opencv.org/4.1.1/d4/da8/group__imgcodecs.html#gabbc7ef1aa2edfaa87772f1202d67e0ce
-    bool save(std::string& name, cv::Mat& image) {
+    bool save(std::string& name, cv::Mat& image, cv::Size size) {
+        cv::Mat toUse;
+        if (size.height == 0 || size.width == 0) {
+            toUse = image;
+        } else {
+            cv::resize(image, toUse, size);
+        }
+        
         std::vector<int> compressionParams;
         compressionParams.push_back(cv::IMWRITE_PNG_COMPRESSION);
         compressionParams.push_back(9);
         
         try {
-            cv::imwrite(name, image);
+            cv::imwrite(name, toUse);
         } catch (const cv::Exception& e) {
             std::cout << "[Visualizer] Failed to save to " << name << ": " << e.what() << std::endl;
             return false;
